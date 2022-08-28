@@ -15,6 +15,7 @@ def dcensus():
         if dchoice == i[4]:
             mycursor.execute("DELETE FROM census_info WHERE Aadhar_Number='{}'".format(dchoice))
             mydb.commit()
+            print("Successfully Deleted")
             break
         else:
             print("Error : No Enteries exists with this Aadhar number in database.")
