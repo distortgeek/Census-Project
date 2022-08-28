@@ -1,4 +1,6 @@
-from tkinter import *
+#backend
+
+
 import mysql.connector
 mydb = mysql.connector.connect(host="localhost",user="root",passwd="root",database="census_info")
 mycursor = mydb.cursor()
@@ -11,8 +13,7 @@ def dcensus():
     myresult = mycursor.fetchall()
     for i in myresult:
         if dchoice == i[4]:
-            sqlform = "DELETE FROM census_info WHERE Aadhar_Number ={dchoice}"
-            mycursor.execute(sqlform)
+            mycursor.execute("DELETE FROM census_info WHERE Aadhar_Number='{dchoice}'")
             mydb.commit()
             break
         else:
@@ -84,26 +85,36 @@ def icensus():
 
 #main
 
-print("Welcome to the database.")
-print("Choice 1 : Show All The Records.")
-print("Choice 2 : Add a new Record.")
-print("Choice 3 : Delete the Record.")
-print("Choice 4 : Search for a Record.")
+while True:
+    print("Welcome to the database.")
+    print("Choice 1 : Show All The Records.")
+    print("Choice 2 : Add a new Record.")
+    print("Choice 3 : Delete the Record.")
+    print("Choice 4 : Search for a Record.")
+    print("Choice 5 : To Quit the Database.")
 
-Tchoice = int(input("Enter the choice to do operation : "))
+    Tchoice = int(input("Enter the choice to do operation : "))
 
-if Tchoice == 1:
-    lcensus()
-elif Tchoice == 2:
-    icensus()
-elif Tchoice == 3:
-    dcensus()
-elif Tchoice == 4:
-    scensus()
-else:
-    print("Invalid choice : Try again.")
+    if Tchoice == 1:
+        lcensus()
+    elif Tchoice == 2:
+        icensus()
+    elif Tchoice == 3:
+        dcensus()
+    elif Tchoice == 4:
+        scensus()
+    elif Tchoice == 5:
+        break
+    else:
+        print("Invalid choice : Try again.")
 
 
+
+#frontend
+
+from tkinter import *
+
+root = Tk()
 
 
 
