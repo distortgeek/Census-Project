@@ -235,26 +235,27 @@ def icensus(): #ADD A RECORD TO THE DATABASE #COMPLETE
 
                 a = 0
                 if len(myresult) == 0:
-                    y = (First_Name, Last_Name, Date_Of_Birth, Email,Aadhar_Number,Father_Name,Mother_Name,City_And_State)
+                    y = (First_Name, Last_Name, Date_Of_Birth,Email,Aadhar_Number,Father_Name,Mother_Name,City_And_State)
                     x.append(y)
                 else:
                     for i in myresult: 
                         if Aadhar_Number == i[0]:
                             a = a + 1
-
-                        if a == 1:
-                            messagebox.showerror("Error","Same Aadhar Number address already exists in database,Try Again.")
                             break
                         else:
-                            y = (First_Name, Last_Name, Date_Of_Birth, Email,Aadhar_Number,Father_Name,Mother_Name,City_And_State)
+                            y = (First_Name, Last_Name, Date_Of_Birth,Email,Aadhar_Number,Father_Name,Mother_Name,City_And_State)
                             x.append(y)
-                            sqlform = "INSERT INTO census_info(First_Name,Last_Name,Date_Of_Birth,Email_ID,Aadhar_Number,Father_Name,Mother_Name,City_And_State) VALUES (%s, %s, %s, %s,%s, %s, %s, %s)"
-                            mycursor.executemany(sqlform,x)
-                            mydb.commit()
-                            messagebox.showinfo("Successful","Updated Entries in Database.")
+
+                if a == 1:
+                    messagebox.showerror("Error","Same Aadhar Number address already exists in database,Try Again.")
+                else:
+                    sqlform = "INSERT INTO census_info(First_Name,Last_Name,Date_Of_Birth,Email_ID,Aadhar_Number,Father_Name,Mother_Name,City_And_State) VALUES (%s, %s, %s, %s,%s, %s, %s, %s)"
+                    mycursor.executemany(sqlform,x)
+                    mydb.commit()
+                    messagebox.showinfo("Successful","Updated Entries in Database.")
 
             def addi():
-                global x,FNameEnt,LNameEnt,DOBEnt,EIDEnt,ANumberEnt,FatherNameEnt,MNameEnt,CASEnt
+                global FNameEnt,LNameEnt,DOBEnt,EIDEnt,ANumberEnt,FatherNameEnt,MNameEnt,CASEnt
                 root=customtkinter.CTk()
                 root.title("Records in Database.")
                 root.geometry("400x1000")
