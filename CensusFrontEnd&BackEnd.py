@@ -4,19 +4,17 @@ from tkinter import simpledialog
 import mysql.connector
 from tkinter import *
 from tkinter import messagebox
+import customtkinter
 
+customtkinter.set_appearance_mode("System")
+customtkinter.set_default_color_theme("blue")
 
-root=Tk()
+root=customtkinter.CTk()
 root.title("Census Record System")
 root.geometry("1000x1200+10+10")
 root.config(bg="#bca0dc")
 
-
-
-
 def table1():
-
-
 
     def c1():
         tu = Label(root,text="Enter user : ",bd=2,width=40,height=2,font=(18),bg="#3c1361")
@@ -32,12 +30,6 @@ def table1():
         ent3 = Entry(root,bd=2,width=40,font=(18),)
         ent3.pack(padx=10,pady=10)
 
-        
-
-
-
-
-
         def c1del():
             tu.after(1,tu.destroy)
             tpass.after(1,tpass.destroy)
@@ -46,7 +38,6 @@ def table1():
             ent2.after(1,ent2.destroy)
             ent3.after(1,ent3.destroy)
             btn5.after(1,btn5.destroy)
-
 
         def dbsetup():
             global entT1,entT2,entT3
@@ -61,12 +52,8 @@ def table1():
             mycursor = mydb.cursor()
             mycursor.execute("create table if not exists census_info(First_Name varchar(64) not null,Last_Name varchar(64) null,Date_Of_Birth date not null,Email_ID varchar(255) not null unique,Aadhar_Number varchar(16) not null primary key,Father_Name varchar(64) not null,Mother_Name varchar(64)  not null,City_And_State varchar(100) not null);")
 
-
-
         btn5 = Button(root,text="Save.",activebackground="#800080",bg = "#7c5295",bd=2,width=40,height=2,font=(32),command=lambda:[table2(),c1del(),dbsetup()])
         btn5.pack(padx=10,pady=10)
-
-
 
     def c2():
         tu = Label(root,text="Enter user : ",bd=2,width=40,height=2,font=(18),bg="#3c1361")
@@ -88,7 +75,6 @@ def table1():
             entT2 = ent2.get()
             entT3 = ent3.get()
 
-
         def c2del():
             tu.after(1,tu.destroy)
             tpass.after(1,tpass.destroy)
@@ -101,15 +87,9 @@ def table1():
         btn4 = Button(root,text="Save.",activebackground="#800080",bg = "#7c5295",bd=2,width=40,height=2,font=(32),command=lambda:[table2(),c2del(),vals()])
         btn4.pack(padx=10,pady=10)
 
-
-
-
-
     def btncdel():
         btnc1.after(1,btnc1.destroy)
         btnc2.after(1,btnc2.destroy)
-
-
 
     btnc1 = Button(root,text="Automatic Configuration (An Automatic Configuration from Scratch.)",command = lambda:[c1(),btncdel()],activebackground="#800080",bg = "#7c5295",bd=2,width=60,height=2,font=(18))
     btnc1.pack(pady=10)
@@ -120,23 +100,14 @@ def table1():
 
     
 
-
-
 def btn1del():
     btn1.after(1,btn1.destroy)
 
 btn1 = Button(root,text="Click me to Start Setup",command = lambda:[table1(),btn1del()],activebackground="#800080",bg = "#7c5295",bd=2,width=40,height=2,font=(32))
 btn1.pack(pady=10)
 
-
-# def db():
-#     global mycursor,mydb
-#     mydb = mysql.connector.connect(host="localhost",user=entT1,passwd=entT2,database=entT3)
-#     mycursor = mydb.cursor()
-
-
 def newwin():
-    root=Tk()
+    root=customtkinter.CTk()
     root.title("Test Win.")
     root.geometry("100x200+10+10")
     root.config(bg="#bca0dc")
@@ -179,13 +150,13 @@ def lcensus(): #SHOW ALL THE RECORDS IN DATABASE #COMPLETE
             a = 1
             mycursor.execute('SELECT * FROM census_info ORDER BY First_Name')
             myresult = mycursor.fetchall()
-            root=Tk()
+            root=customtkinter.CTk()
             root.title("Records in Database.")
             root.geometry("400x600")
             root.config(bg="#D586FF")
             scrollbar = Scrollbar(root)
             scrollbar.pack( side = RIGHT, fill = Y )
-            listbox = Listbox(root, yscrollcommand = scrollbar.set,bg="#D586FF",font="32",height = "25")
+            listbox = Listbox(root, yscrollcommand = scrollbar.set,bg="#D586FF",font="32",height = "33")
             listbox.pack(fill = BOTH)
             for i in myresult:
                 listbox.insert(END,"Record Number : "+str(a))
@@ -220,13 +191,13 @@ def scensus():#SEARCH FOR A RECORD IN DATABASE #COMPLETE
             break
     if a == 1:
         def show():
-            root=Tk()
+            root=customtkinter.CTk()
             root.title("Records in Database.")
             root.geometry("400x600")
             root.config(bg="#D586FF")
             scrollbar = Scrollbar(root)
             scrollbar.pack( side = RIGHT, fill = Y )
-            listbox = Listbox(root, yscrollcommand = scrollbar.set,bg="#D586FF",font="32",height="25")
+            listbox = Listbox(root, yscrollcommand = scrollbar.set,bg="#D586FF",font="32",height="33")
             listbox.pack(fill = BOTH)
             listbox.insert(END,"First Name : "+b[0])
             listbox.insert(END,"Last Name : "+b[1])
@@ -244,52 +215,99 @@ def scensus():#SEARCH FOR A RECORD IN DATABASE #COMPLETE
         messagebox.showerror("Error","No Records exists with this Aadhar number in database.")
 
 def icensus(): #ADD A RECORD TO THE DATABASE #COMPLETE
-    mydb = mysql.connector.connect(host="localhost",user=entT1,passwd=entT2,database=entT3)
-    mycursor = mydb.cursor()
-    x = []
-    mycursor.execute('SELECT Aadhar_Number,Date_Of_Birth FROM census_info ORDER BY First_Name')
-    myresult = mycursor.fetchall()
 
-    while True:
-        First_Name = simpledialog.askstring("First Name","Enter your First Name")
-        Last_Name = simpledialog.askstring("Last Name","Enter your Last Name")
-        Date_Of_Birth = simpledialog.askstring("Date Of Birth(YYYY-MM-DD)","Enter your Date Of Birth(YYYY-MM-DD)")
-        Email = simpledialog.askstring("Email ID","Enter your Email ID")
-        Aadhar_Number = simpledialog.askstring("Aadhar Number","Enter your Aadhar Number")
-        Father_Name = simpledialog.askstring("Father's Name","Enter your Father's Name")
-        Mother_Name = simpledialog.askstring("Mother's Name","Enter your Mother's Name")
-        City_And_State = simpledialog.askstring("City and State","Enter your City and State(City/State)")
-        
-        if len(myresult) == 0:
-            y = (First_Name, Last_Name, Date_Of_Birth, Email,Aadhar_Number,Father_Name,Mother_Name,City_And_State)
-            x.append(y)
+            mydb = mysql.connector.connect(host="localhost",user=entT1,passwd=entT2,database=entT3)
+            mycursor = mydb.cursor()
             
-        else:
-            for i in myresult: 
-                if Aadhar_Number == i[0]:
-                    print("Error : Same Aadhar Number address already exists in database,Try Again.")
-                    break
-                else:
+            mycursor.execute('SELECT Aadhar_Number,Date_Of_Birth FROM census_info ORDER BY First_Name')
+            myresult = mycursor.fetchall()
+
+            def addvals():
+                x = []
+                First_Name = FNameEnt.get()
+                Last_Name = LNameEnt.get()
+                Date_Of_Birth = DOBEnt.get()
+                Email = EIDEnt.get()
+                Aadhar_Number = ANumberEnt.get()
+                Father_Name = FatherNameEnt.get()
+                Mother_Name = MNameEnt.get()
+                City_And_State = CASEnt.get()
+
+                a = 0
+                if len(myresult) == 0:
                     y = (First_Name, Last_Name, Date_Of_Birth, Email,Aadhar_Number,Father_Name,Mother_Name,City_And_State)
                     x.append(y)
+                else:
+                    for i in myresult: 
+                        if Aadhar_Number == i[0]:
+                            a = a + 1
 
-        choice = messagebox.askquestion("Add More Entries?","Would you like to enter more entries?(Y/N)")
-        if choice == "Y" or choice == "T" or choice == "y" or choice == "t" or choice == "yes" or choice == "YES":
-            continue
-        else:
-            break
+                        if a == 1:
+                            messagebox.showerror("Error","Same Aadhar Number address already exists in database,Try Again.")
+                            break
+                        else:
+                            y = (First_Name, Last_Name, Date_Of_Birth, Email,Aadhar_Number,Father_Name,Mother_Name,City_And_State)
+                            x.append(y)
+                            sqlform = "INSERT INTO census_info(First_Name,Last_Name,Date_Of_Birth,Email_ID,Aadhar_Number,Father_Name,Mother_Name,City_And_State) VALUES (%s, %s, %s, %s,%s, %s, %s, %s)"
+                            mycursor.executemany(sqlform,x)
+                            mydb.commit()
+                            messagebox.showinfo("Successful","Updated Entries in Database.")
 
-    sqlform = "INSERT INTO census_info(First_Name,Last_Name,Date_Of_Birth,Email_ID,Aadhar_Number,Father_Name,Mother_Name,City_And_State) VALUES (%s, %s, %s, %s,%s, %s, %s, %s)"
-    mycursor.executemany(sqlform,x)
-    mydb.commit()
-    messagebox.showinfo("Successful","Updated Entries in Database.")
+            def addi():
+                global x,FNameEnt,LNameEnt,DOBEnt,EIDEnt,ANumberEnt,FatherNameEnt,MNameEnt,CASEnt
+                root=customtkinter.CTk()
+                root.title("Records in Database.")
+                root.geometry("400x1000")
+                root.config(bg="#D586FF")
+
+                
+                FName = Label(root,text="Enter your First Name",bd=2,width=40,height=2,font=(18),bg="#3c1361")
+                FName.pack(padx=10,pady=10)
+                FNameEnt = Entry(root,bd=2,width=40,font=(18))
+                FNameEnt.pack(padx=10,pady=10)
+                LName = Label(root,text="Enter your Last Name",bd=2,width=40,height=2,font=(18),bg="#3c1361")
+                LName.pack(padx=10,pady=10)
+                LNameEnt = Entry(root,bd=2,width=40,font=(18))
+                LNameEnt.pack(padx=10,pady=10)
+                DOB = Label(root,text="Enter your Date Of Birth(YYYY-MM-DD)",bd=2,width=40,height=2,font=(18),bg="#3c1361")
+                DOB.pack(padx=10,pady=10)
+                DOBEnt = Entry(root,bd=2,width=40,font=(18))
+                DOBEnt.pack(padx=10,pady=10)
+                EID = Label(root,text="Enter your Email ID",bd=2,width=40,height=2,font=(18),bg="#3c1361")
+                EID.pack(padx=10,pady=10)
+                EIDEnt = Entry(root,bd=2,width=40,font=(18))
+                EIDEnt.pack(padx=10,pady=10)
+                ANumber = Label(root,text="Enter your Aadhar Number",bd=2,width=40,height=2,font=(18),bg="#3c1361")
+                ANumber.pack(padx=10,pady=10)
+                ANumberEnt = Entry(root,bd=2,width=40,font=(18))
+                ANumberEnt.pack(padx=10,pady=10)
+                FatherName = Label(root,text="Enter your Father's Name",bd=2,width=40,height=2,font=(18),bg="#3c1361")
+                FatherName.pack(padx=10,pady=10)
+                FatherNameEnt = Entry(root,bd=2,width=40,font=(18))
+                FatherNameEnt.pack(padx=10,pady=10)
+                MName = Label(root,text="Enter your Mother's Name",bd=2,width=40,height=2,font=(18),bg="#3c1361")
+                MName.pack(padx=10,pady=10)
+                MNameEnt = Entry(root,bd=2,width=40,font=(18))
+                MNameEnt.pack(padx=10,pady=10)
+                CAS = Label(root,text="Enter your City and State(City/State)",bd=2,width=40,height=2,font=(18),bg="#3c1361")
+                CAS.pack(padx=10,pady=10)
+                CASEnt = Entry(root,bd=2,width=40,font=(18))
+                CASEnt.pack(padx=10,pady=10)
+
+                BTN = Button(root,text="SAVE",activebackground="#800080",bg = "#7c5295",bd=2,width=40,height=2,font=(32),command = addvals)
+                BTN.pack(padx=10,pady=10)
+
+                root.resizable(False,False)
+                root.mainloop()
+
+            addi()
 
 def rcensus(file1): #READ A CSV AND APPEND ITS ALL ENTRY TO DATABASE #COMPLETE
     mydb = mysql.connector.connect(host="localhost",user=entT1,passwd=entT2,database=entT3)
     mycursor = mydb.cursor()
     y=[]
     x = t = d = 0
-    mycursor.execute('SELECT Aadhar_Number,Date_Of_Birth FROM census_info ORDER BY First_Name')
+    mycursor.execute('SELECT Aadhar_Number,Email_ID FROM census_info ORDER BY First_Name')
     myresult = mycursor.fetchall()
     with open(file1, "r") as f:
         reader = csv.reader(f)
@@ -307,16 +325,16 @@ def rcensus(file1): #READ A CSV AND APPEND ITS ALL ENTRY TO DATABASE #COMPLETE
 
                 for z in myresult:
                     for f in y:
-                        if z[0] == f[4]:
+                        if z[0] == f[4] or z[1] == f[3]:
                             def error1():
                                 messagebox.showerror("Error",  "Database already contains data,Remove this entry either from database or from the CSV file.")
-                                root=Tk()
+                                root=customtkinter.CTk()
                                 root.title("Records in Database.")
                                 root.geometry("400x600")
                                 root.config(bg="#D586FF")
                                 scrollbar = Scrollbar(root)
                                 scrollbar.pack( side = RIGHT, fill = Y )
-                                listbox = Listbox(root, yscrollcommand = scrollbar.set,bg="#D586FF",font="32",height="25")
+                                listbox = Listbox(root, yscrollcommand = scrollbar.set,bg="#D586FF",font="32",height="33")
                                 listbox.pack(fill = BOTH)
                                 listbox.insert(END,"First Name : "+f[0])
                                 listbox.insert(END,"Last Name : "+f[1])
@@ -329,24 +347,24 @@ def rcensus(file1): #READ A CSV AND APPEND ITS ALL ENTRY TO DATABASE #COMPLETE
 
                                 root.resizable(False,False)
                                 root.mainloop()
-                                t = t+1
                             error1()
+                            t = t+1
                             break
                         else:
                                 x = x+1
             else:
                 for f in y:
                     for z in myresult:
-                        if z[0] == f[4]:
+                        if z[0] == f[4] or z[1] == f[3]:
                             def error2():
                                 messagebox.showerror("Error",  "Database already contains data,Remove this entry either from database or from the CSV file.")
-                                root=Tk()
+                                root=customtkinter.CTk()
                                 root.title("Records in Database.")
                                 root.geometry("400x600")
                                 root.config(bg="#D586FF")
                                 scrollbar = Scrollbar(root)
                                 scrollbar.pack( side = RIGHT, fill = Y )
-                                listbox = Listbox(root, yscrollcommand = scrollbar.set,bg="#D586FF",font="32",height="25")
+                                listbox = Listbox(root, yscrollcommand = scrollbar.set,bg="#D586FF",font="32",height="33")
                                 listbox.pack(fill = BOTH)
                                 listbox.insert(END,"First Name : "+f[0])
                                 listbox.insert(END,"Last Name : "+f[1])
@@ -359,8 +377,8 @@ def rcensus(file1): #READ A CSV AND APPEND ITS ALL ENTRY TO DATABASE #COMPLETE
 
                                 root.resizable(False,False)
                                 root.mainloop()
-                                t = t+1
                             error2()
+                            t = t+1
                             break
                         else:
                                 x = x+1
@@ -398,106 +416,369 @@ def ucensus(): #UPDATE ANY ENTRY INTO DATABASE #COMPLETE
     root.geometry("400x565")
     root.config(bg="#D586FF")
 
-
-
     def fup():
         mydb = mysql.connector.connect(host="localhost",user=entT1,passwd=entT2,database=entT3)
         mycursor = mydb.cursor()
         mycursor.execute('SELECT * FROM census_info ORDER BY First_Name')
-        myresult = mycursor.fetchall()
-        ufseach = simpledialog.askstring("Update First Name","Enter the Aadhar Number(To Search the entry in database) : ")
-        ufname = simpledialog.askstring("Update First Name","Enter the new First Name : ")
-        mycursor.execute("UPDATE census_info SET First_Name='{}' WHERE Aadhar_Number='{}'".format(ufname,ufseach))
-        mydb.commit()
-        messagebox.showinfo("Successful","Updated First Name in database.")
+        root=customtkinter.CTk()
+        root.title("Update Complete Record.")
+        root.geometry("400x600")
+        root.config(bg="#D586FF")
+        SAadhar = Label(root, text="Enter Aadhar Number to search for record.",bd=2,width=40,height=2,font=(18),bg="#3c1361")
+        SAadhar.pack(padx=10,pady=10)
+        SAadharEntry = Entry(root,bd=2,width=40,font=(18))
+        SAadharEntry.pack(padx=10,pady=10)
+        FName = Label(root,text="Enter your First Name",bd=2,width=40,height=2,font=(18),bg="#3c1361")
+        FName.pack(padx=10,pady=10)
+        FNameEnt = Entry(root,bd=2,width=40,font=(18))
+        FNameEnt.pack(padx=10,pady=10)
+
+        def fvals():
+            global ufname,ufsearch
+            ufsearch = SAadharEntry.get()
+            ufname = FNameEnt.get()
+
+        def execute():
+            fvals()
+            mydb = mysql.connector.connect(host="localhost",user=entT1,passwd=entT2,database=entT3)
+            mycursor = mydb.cursor()
+            mycursor.execute("UPDATE census_info SET First_Name='{}' WHERE Aadhar_Number='{}'".format(ufname,ufsearch))
+            mydb.commit()
+            root.destroy()
+            messagebox.showinfo("Successful","Updated First Name in database.")
+
+        BTN = Button(root,text="SAVE",activebackground="#800080",bg = "#7c5295",bd=2,width=40,height=2,font=(32),command = execute)
+        BTN.pack(padx=10,pady=10)
+
+        root.resizable(False,False)
+        root.mainloop()
+
     def lup():
         mydb = mysql.connector.connect(host="localhost",user=entT1,passwd=entT2,database=entT3)
         mycursor = mydb.cursor()
         mycursor.execute('SELECT * FROM census_info ORDER BY First_Name')
-        myresult = mycursor.fetchall()
-        ufseach = simpledialog.askstring("Update Last Name","Enter the Aadhar Number(To Search the entry in database) : ")
-        ufname = simpledialog.askstring("Update Last Name","Enter the new Last Name : ")
-        mycursor.execute("UPDATE census_info SET Last_Name='{}' WHERE Aadhar_Number='{}'".format(ufname,ufseach))
-        mydb.commit()
-        messagebox.showinfo("Successful","Updated Last Name in database.")
+        root=customtkinter.CTk()
+        root.title("Update Complete Record.")
+        root.geometry("400x600")
+        root.config(bg="#D586FF")
+        SAadhar = Label(root, text="Enter Aadhar Number to search for record.",bd=2,width=40,height=2,font=(18),bg="#3c1361")
+        SAadhar.pack(padx=10,pady=10)
+        SAadharEntry = Entry(root,bd=2,width=40,font=(18))
+        SAadharEntry.pack(padx=10,pady=10)
+        LName = Label(root,text="Enter your Last Name",bd=2,width=40,height=2,font=(18),bg="#3c1361")
+        LName.pack(padx=10,pady=10)
+        LNameEnt = Entry(root,bd=2,width=40,font=(18))
+        LNameEnt.pack(padx=10,pady=10)
+
+        def lvals():
+            global ulname,ufsearch
+            ufsearch = SAadharEntry.get()
+            ulname = LNameEnt.get()
+
+        def execute():
+            lvals()
+            mydb = mysql.connector.connect(host="localhost",user=entT1,passwd=entT2,database=entT3)
+            mycursor = mydb.cursor()
+            mycursor.execute("UPDATE census_info SET Last_Name='{}' WHERE Aadhar_Number='{}'".format(ulname,ufsearch))
+            mydb.commit()
+            root.destroy()
+            messagebox.showinfo("Successful","Updated Last Name in database.")
+
+        BTN = Button(root,text="SAVE",activebackground="#800080",bg = "#7c5295",bd=2,width=40,height=2,font=(32),command = execute)
+        BTN.pack(padx=10,pady=10)
+
+        root.resizable(False,False)
+        root.mainloop()
+
     def dobup():
         mydb = mysql.connector.connect(host="localhost",user=entT1,passwd=entT2,database=entT3)
         mycursor = mydb.cursor()
         mycursor.execute('SELECT * FROM census_info ORDER BY First_Name')
-        myresult = mycursor.fetchall()
-        ufseach = simpledialog.askstringinput("Update Date Of Birth Name","Enter the Aadhar Number(To Search the entry in database) : ")
-        ufname = simpledialog.askstring("Update Date Of Birth Name","Enter the new Date of Birth(YYYY-MM-DD) : ")
-        mycursor.execute("UPDATE census_info SET Date_Of_Birth='{}' WHERE Aadhar_Number='{}'".format(ufname,ufseach))
-        mydb.commit()
-        messagebox.showinfo("Successful","Updated Date of Birth in database.")
+        root=customtkinter.CTk()
+        root.title("Update Complete Record.")
+        root.geometry("400x600")
+        root.config(bg="#D586FF")
+        SAadhar = Label(root, text="Enter Aadhar Number to search for record.",bd=2,width=40,height=2,font=(18),bg="#3c1361")
+        SAadhar.pack(padx=10,pady=10)
+        SAadharEntry = Entry(root,bd=2,width=40,font=(18))
+        SAadharEntry.pack(padx=10,pady=10)
+        DOB = Label(root,text="Enter your Date Of Birth(YYYY-MM-DD)",bd=2,width=40,height=2,font=(18),bg="#3c1361")
+        DOB.pack(padx=10,pady=10)
+        DOBEnt = Entry(root,bd=2,width=40,font=(18))
+        DOBEnt.pack(padx=10,pady=10)
+        def dobvals():
+            global udob,ufsearch
+            ufsearch = SAadharEntry.get()
+            udob = DOBEnt.get()
+
+        def execute():
+            dobvals()
+            mydb = mysql.connector.connect(host="localhost",user=entT1,passwd=entT2,database=entT3)
+            mycursor = mydb.cursor()
+            mycursor.execute("UPDATE census_info SET Date_Of_Birth='{}' WHERE Aadhar_Number='{}'".format(udob,ufsearch))
+            mydb.commit()
+            root.destroy()
+            messagebox.showinfo("Successful","Updated Date of Birth in database.")
+
+        BTN = Button(root,text="SAVE",activebackground="#800080",bg = "#7c5295",bd=2,width=40,height=2,font=(32),command = execute)
+        BTN.pack(padx=10,pady=10)
+
+        root.resizable(False,False)
+        root.mainloop()
+
     def eidup():
         mydb = mysql.connector.connect(host="localhost",user=entT1,passwd=entT2,database=entT3)
         mycursor = mydb.cursor()
         mycursor.execute('SELECT * FROM census_info ORDER BY First_Name')
-        myresult = mycursor.fetchall()
-        ufseach = simpledialog.askstring("Update Email ID","Enter the Aadhar Number(To Search the entry in database) : ")
-        ufname = simpledialog.askstring("Update Email ID","Enter the new Email ID : ")
-        mycursor.execute("UPDATE census_info SET Email_ID='{}' WHERE Aadhar_Number='{}'".format(ufname,ufseach))
-        mydb.commit()
-        messagebox.showinfo("Successful","Updated Email ID in database.")
+        root=customtkinter.CTk()
+        root.title("Update Complete Record.")
+        root.geometry("400x600")
+        root.config(bg="#D586FF")
+        SAadhar = Label(root, text="Enter Aadhar Number to search for record.",bd=2,width=40,height=2,font=(18),bg="#3c1361")
+        SAadhar.pack(padx=10,pady=10)
+        SAadharEntry = Entry(root,bd=2,width=40,font=(18))
+        SAadharEntry.pack(padx=10,pady=10)
+        EID = Label(root,text="Enter your Email ID",bd=2,width=40,height=2,font=(18),bg="#3c1361")
+        EID.pack(padx=10,pady=10)
+        EIDEnt = Entry(root,bd=2,width=40,font=(18))
+        EIDEnt.pack(padx=10,pady=10)
+        def eidvals():
+            global uemail,ufsearch
+            ufsearch = SAadharEntry.get()
+            uemail = EIDEnt.get()
+
+        def execute():
+            eidvals()
+            mydb = mysql.connector.connect(host="localhost",user=entT1,passwd=entT2,database=entT3)
+            mycursor = mydb.cursor()
+            mycursor.execute("UPDATE census_info SET Email_ID='{}' WHERE Aadhar_Number='{}'".format(uemail,ufsearch))
+            mydb.commit()
+            root.destroy()
+            messagebox.showinfo("Successful","Updated Email ID in database.")
+
+        BTN = Button(root,text="SAVE",activebackground="#800080",bg = "#7c5295",bd=2,width=40,height=2,font=(32),command = execute)
+        BTN.pack(padx=10,pady=10)
+
+        root.resizable(False,False)
+        root.mainloop()
+
     def aadharup():
         mydb = mysql.connector.connect(host="localhost",user=entT1,passwd=entT2,database=entT3)
         mycursor = mydb.cursor()
         mycursor.execute('SELECT * FROM census_info ORDER BY First_Name')
-        myresult = mycursor.fetchall()
-        ufseach = simpledialog.askstring("Update Aadhar Number","Enter the Aadhar Number(To Search the entry in database) : ")
-        ufname = simpledialog.askstring("Update Aadhar Number","Enter the new Aadhar Number : ")
-        mycursor.execute("UPDATE census_info SET Aadhar_Number='{}' WHERE Aadhar_Number='{}'".format(ufname,ufseach))
-        mydb.commit()
-        messagebox.showinfo("Successful","Updated Aadhar Number in database.")
+        root=customtkinter.CTk()
+        root.title("Update Complete Record.")
+        root.geometry("400x600")
+        root.config(bg="#D586FF")
+        SAadhar = Label(root, text="Enter Aadhar Number to search for record.",bd=2,width=40,height=2,font=(18),bg="#3c1361")
+        SAadhar.pack(padx=10,pady=10)
+        SAadharEntry = Entry(root,bd=2,width=40,font=(18))
+        SAadharEntry.pack(padx=10,pady=10)
+        ANumber = Label(root,text="Enter your Aadhar Number",bd=2,width=40,height=2,font=(18),bg="#3c1361")
+        ANumber.pack(padx=10,pady=10)
+        ANumberEnt = Entry(root,bd=2,width=40,font=(18))
+        ANumberEnt.pack(padx=10,pady=10)
+        def aadharvals():
+            global uadhaar,ufsearch
+            ufsearch = SAadharEntry.get()
+            uadhaar = ANumberEnt.get()
+
+        def execute():
+            aadharvals()
+            mydb = mysql.connector.connect(host="localhost",user=entT1,passwd=entT2,database=entT3)
+            mycursor = mydb.cursor()
+            mycursor.execute("UPDATE census_info SET Aadhar_Number='{}' WHERE Aadhar_Number='{}'".format(uadhaar,ufsearch))
+            mydb.commit()
+            root.destroy()
+            messagebox.showinfo("Successful","Updated Aadhar Number in database.")
+
+        BTN = Button(root,text="SAVE",activebackground="#800080",bg = "#7c5295",bd=2,width=40,height=2,font=(32),command = execute)
+        BTN.pack(padx=10,pady=10)
+
+        root.resizable(False,False)
+        root.mainloop()
+
     def fatherup():
         mydb = mysql.connector.connect(host="localhost",user=entT1,passwd=entT2,database=entT3)
         mycursor = mydb.cursor()
         mycursor.execute('SELECT * FROM census_info ORDER BY First_Name')
-        myresult = mycursor.fetchall()
-        ufseach = simpledialog.askstring("Update Father's Name","Enter the Aadhar Number(To Search the entry in database) : ")
-        ufname = simpledialog.askstring("Update Father's Name","Enter the new Father's Name : ")
-        mycursor.execute("UPDATE census_info SET Father_Name='{}' WHERE Aadhar_Number='{}'".format(ufname,ufseach))
-        mydb.commit()
-        messagebox.showinfo("Successful","Updated Father's Name in database.")
+        root=customtkinter.CTk()
+        root.title("Update Complete Record.")
+        root.geometry("400x600")
+        root.config(bg="#D586FF")
+        SAadhar = Label(root, text="Enter Aadhar Number to search for record.",bd=2,width=40,height=2,font=(18),bg="#3c1361")
+        SAadhar.pack(padx=10,pady=10)
+        SAadharEntry = Entry(root,bd=2,width=40,font=(18))
+        SAadharEntry.pack(padx=10,pady=10)
+        FatherName = Label(root,text="Enter your Father's Name",bd=2,width=40,height=2,font=(18),bg="#3c1361")
+        FatherName.pack(padx=10,pady=10)
+        FatherNameEnt = Entry(root,bd=2,width=40,font=(18))
+        FatherNameEnt.pack(padx=10,pady=10)
+        def f1vals():
+            global uf1name,ufsearch
+            ufsearch = SAadharEntry.get()
+            uf1name = FatherNameEnt.get()
+
+        def execute():
+            f1vals()
+            mydb = mysql.connector.connect(host="localhost",user=entT1,passwd=entT2,database=entT3)
+            mycursor = mydb.cursor()
+            mycursor.execute("UPDATE census_info SET Father_Name='{}' WHERE Aadhar_Number='{}'".format(uf1name,ufsearch))
+            mydb.commit()
+            root.destroy()
+            messagebox.showinfo("Successful","Updated Father's Name in database.")
+
+        BTN = Button(root,text="SAVE",activebackground="#800080",bg = "#7c5295",bd=2,width=40,height=2,font=(32),command = execute)
+        BTN.pack(padx=10,pady=10)
+
+        root.resizable(False,False)
+        root.mainloop()
+
     def mup():
         mydb = mysql.connector.connect(host="localhost",user=entT1,passwd=entT2,database=entT3)
         mycursor = mydb.cursor()
         mycursor.execute('SELECT * FROM census_info ORDER BY First_Name')
-        myresult = mycursor.fetchall()
-        ufseach = simpledialog.askstring("Update Mother's Name","Enter the Aadhar Number(To Search the entry in database) : ")
-        ufname = simpledialog.askstring("Update Mother's Name","Enter the new Mother's Name : ")
-        mycursor.execute("UPDATE census_info SET Mother_Name='{}' WHERE Aadhar_Number='{}'".format(ufname,ufseach))
-        mydb.commit()
-        messagebox.showinfo("Successful","Updated Mother's Name in database.")
+        root=customtkinter.CTk()
+        root.title("Update Complete Record.")
+        root.geometry("400x600")
+        root.config(bg="#D586FF")
+        SAadhar = Label(root, text="Enter Aadhar Number to search for record.",bd=2,width=40,height=2,font=(18),bg="#3c1361")
+        SAadhar.pack(padx=10,pady=10)
+        SAadharEntry = Entry(root,bd=2,width=40,font=(18))
+        SAadharEntry.pack(padx=10,pady=10)
+        MName = Label(root,text="Enter your Mother's Name",bd=2,width=40,height=2,font=(18),bg="#3c1361")
+        MName.pack(padx=10,pady=10)
+        MNameEnt = Entry(root,bd=2,width=40,font=(18))
+        MNameEnt.pack(padx=10,pady=10)
+
+        def mvals():
+            global umname,ufsearch
+            ufsearch = SAadharEntry.get()
+            umname = MNameEnt.get()
+
+        def execute():
+            mvals()
+            mydb = mysql.connector.connect(host="localhost",user=entT1,passwd=entT2,database=entT3)
+            mycursor = mydb.cursor()
+            mycursor.execute("UPDATE census_info SET Mother_Name='{}' WHERE Aadhar_Number='{}'".format(umname,ufsearch))
+            mydb.commit()
+            root.destroy()
+            messagebox.showinfo("Successful","Updated Mother's Name in database.")
+
+        BTN = Button(root,text="SAVE",activebackground="#800080",bg = "#7c5295",bd=2,width=40,height=2,font=(32),command = execute)
+        BTN.pack(padx=10,pady=10)
+
+        root.resizable(False,False)
+        root.mainloop()
+
     def csup():
         mydb = mysql.connector.connect(host="localhost",user=entT1,passwd=entT2,database=entT3)
         mycursor = mydb.cursor()
         mycursor.execute('SELECT * FROM census_info ORDER BY First_Name')
-        myresult = mycursor.fetchall()
-        ufseach = simpledialog.askstring("Update City and State Name","Enter the Aadhar Number(To Search the entry in database) : ")
-        ufname = simpledialog.askstring("Update City and State Name","Enter the new City & State : ")
-        mycursor.execute("UPDATE census_info SET City_And_State='{}' WHERE Aadhar_Number='{}'".format(ufname,ufseach))
-        mydb.commit()
-        messagebox.showinfo("Successful","Updated City & State in database.")
+        root=customtkinter.CTk()
+        root.title("Update Complete Record.")
+        root.geometry("400x600")
+        root.config(bg="#D586FF")
+        SAadhar = Label(root, text="Enter Aadhar Number to search for record.",bd=2,width=40,height=2,font=(18),bg="#3c1361")
+        SAadhar.pack(padx=10,pady=10)
+        SAadharEntry = Entry(root,bd=2,width=40,font=(18))
+        SAadharEntry.pack(padx=10,pady=10)
+        CAS = Label(root,text="Enter your City and State(City/State)",bd=2,width=40,height=2,font=(18),bg="#3c1361")
+        CAS.pack(padx=10,pady=10)
+        CASEnt = Entry(root,bd=2,width=40,font=(18))
+        CASEnt.pack(padx=10,pady=10)
+        def csvals():
+            global ucsname,ufsearch
+            ufsearch = SAadharEntry.get()
+            ucsname = CASEnt.get()
+
+        def execute():
+            csvals()
+            mydb = mysql.connector.connect(host="localhost",user=entT1,passwd=entT2,database=entT3)
+            mycursor = mydb.cursor()
+            mycursor.execute("UPDATE census_info SET City_And_State='{}' WHERE Aadhar_Number='{}'".format(ucsname,ufsearch))
+            mydb.commit()
+            root.destroy()
+            messagebox.showinfo("Successful","Updated City & State in database.")
+
+        BTN = Button(root,text="SAVE",activebackground="#800080",bg = "#7c5295",bd=2,width=40,height=2,font=(32),command = execute)
+        BTN.pack(padx=10,pady=10)
+
+        root.resizable(False,False)
+        root.mainloop()
+
     def crup():
         mydb = mysql.connector.connect(host="localhost",user=entT1,passwd=entT2,database=entT3)
         mycursor = mydb.cursor()
         mycursor.execute('SELECT * FROM census_info ORDER BY First_Name')
-        myresult = mycursor.fetchall()
-        ufseach = simpledialog.askstring("Update Complete Record","Enter the Aadhar Number(To Search the entry in database) : ")
-        ufname = simpledialog.askstring("Update Complete Record","Enter the new First Name : ")
-        ulname = simpledialog.askstring("Update Complete Record","Enter the new Last Name : ")
-        udob = simpledialog.askstring("Update Complete Record","Enter the new Date of Birth(YYYY-MM-DD) : ")
-        uemail = simpledialog.askstring("Update Complete Record","Enter the new Email ID : ")
-        uadhaar = simpledialog.askstring("Update Complete Record","Enter the new Aadhar Number : ")
-        uf1name = simpledialog.askstring("Update Complete Record","Enter the new Father's Name : ")
-        umname = simpledialog.askstring("Update Complete Record","Enter the new Mother's Name : ")
-        ucsname = simpledialog.askstring("Update Complete Record","Enter the new City & State Name : ")
-        mycursor.execute("UPDATE census_info SET First_Name='{}',Last_Name='{}',Date_Of_Birth='{}',Email_ID='{}',Aadhar_Number='{}',Father_Name='{}',Mother_Name='{}',City_And_State='{}' WHERE Aadhar_Number='{}'".format(ufname,ulname,udob,uemail,uadhaar,uf1name,umname,ucsname,ufseach))
-        mydb.commit()
-        messagebox.showinfo("Successful","Updated complete Record in database.")
+        root=customtkinter.CTk()
+        root.title("Update Complete Record.")
+        root.geometry("400x800")
+        root.config(bg="#D586FF")
 
+        SAadhar = Label(root, text="Enter Aadhar Number to search for record.",bd=2,width=40,height=1,font=(18),bg="#3c1361")
+        SAadhar.pack(padx=10,pady=10)
+        SAadharEntry = Entry(root,bd=2,width=40,font=(18))
+        SAadharEntry.pack(padx=10,pady=10)
+        FName = Label(root,text="Enter your First Name",bd=2,width=40,height=1,font=(18),bg="#3c1361")
+        FName.pack(padx=10,pady=10)
+        FNameEnt = Entry(root,bd=2,width=40,font=(18))
+        FNameEnt.pack(padx=10,pady=10)
+        LName = Label(root,text="Enter your Last Name",bd=2,width=40,height=1,font=(18),bg="#3c1361")
+        LName.pack(padx=10,pady=10)
+        LNameEnt = Entry(root,bd=2,width=40,font=(18))
+        LNameEnt.pack(padx=10,pady=10)
+        DOB = Label(root,text="Enter your Date Of Birth(YYYY-MM-DD)",bd=2,width=40,height=1,font=(18),bg="#3c1361")
+        DOB.pack(padx=10,pady=10)
+        DOBEnt = Entry(root,bd=2,width=40,font=(18))
+        DOBEnt.pack(padx=10,pady=10)
+        EID = Label(root,text="Enter your Email ID",bd=2,width=40,height=1,font=(18),bg="#3c1361")
+        EID.pack(padx=10,pady=10)
+        EIDEnt = Entry(root,bd=2,width=40,font=(18))
+        EIDEnt.pack(padx=10,pady=10)
+        ANumber = Label(root,text="Enter your Aadhar Number",bd=2,width=40,height=1,font=(18),bg="#3c1361")
+        ANumber.pack(padx=10,pady=10)
+        ANumberEnt = Entry(root,bd=2,width=40,font=(18))
+        ANumberEnt.pack(padx=10,pady=10)
+        FatherName = Label(root,text="Enter your Father's Name",bd=2,width=40,height=1,font=(18),bg="#3c1361")
+        FatherName.pack(padx=10,pady=10)
+        FatherNameEnt = Entry(root,bd=2,width=40,font=(18))
+        FatherNameEnt.pack(padx=10,pady=10)
+        MName = Label(root,text="Enter your Mother's Name",bd=2,width=40,height=1,font=(18),bg="#3c1361")
+        MName.pack(padx=10,pady=10)
+        MNameEnt = Entry(root,bd=2,width=40,font=(18))
+        MNameEnt.pack(padx=10,pady=10)
+        CAS = Label(root,text="Enter your City and State(City/State)",bd=2,width=40,height=1,font=(18),bg="#3c1361")
+        CAS.pack(padx=10,pady=10)
+        CASEnt = Entry(root,bd=2,width=40,font=(18))
+        CASEnt.pack(padx=10,pady=10)
+
+        def ucvals():
+            global ufsearch,ufname,ulname,udob,uemail,uadhaar,uf1name,umname,ucsname
+        ufsearch = SAadharEntry.get()
+        ufname = FNameEnt.get()
+        ulname = LNameEnt.get()
+        udob = DOBEnt.get()
+        uemail = EIDEnt.get()
+        uadhaar = ANumberEnt.get()
+        uf1name = FatherNameEnt.get()
+        umname = MNameEnt.get()
+        ucsname = CASEnt.get()
+
+        def execute():
+            ucvals()
+            mydb = mysql.connector.connect(host="localhost",user=entT1,passwd=entT2,database=entT3)
+            mycursor = mydb.cursor()
+            mycursor.execute("UPDATE census_info SET First_Name='{}',Last_Name='{}',Date_Of_Birth='{}',Email_ID='{}',Aadhar_Number='{}',Father_Name='{}',Mother_Name='{}',City_And_State='{}' WHERE Aadhar_Number='{}'".format(ufname,ulname,udob,uemail,uadhaar,uf1name,umname,ucsname,ufsearch))
+            mydb.commit()
+            root.destroy()
+            messagebox.showinfo("Successful","Updated complete Record in database.")
+
+        BTN = Button(root,text="SAVE",activebackground="#800080",bg = "#7c5295",bd=2,width=40,height=1,font=(32),command= execute)
+        BTN.pack(padx=10,pady=10)
+
+        root.resizable(False,False)
+        root.mainloop()
 
     bt1 = Button(root,text="Update First Name.",activebackground="#800080",bg = "#7c5295",bd=2,width=40,height=2,font=(32),command = fup).pack()
     bt2 = Button(root,text="Update Last Name.",activebackground="#800080",bg = "#7c5295",bd=2,width=40,height=2,font=(32),command = lup).pack()
@@ -511,13 +792,13 @@ def ucensus(): #UPDATE ANY ENTRY INTO DATABASE #COMPLETE
 
     root.resizable(False,False)
     root.mainloop()
+    root.destroy()
 
 def setupcensus():#SETUP TABLE IN A PRE-MADE DATABASE #COMPLETE
     mydb = mysql.connector.connect(host="localhost",user=entT1,passwd=entT2,database=entT3)
     mycursor = mydb.cursor()
     mycursor.execute("create table if not exists census_info(First_Name varchar(64) not null,Last_Name varchar(64) null,Date_Of_Birth date not null,Email_ID varchar(255) not null unique,Aadhar_Number varchar(16) not null primary key,Father_Name varchar(64) not null,Mother_Name varchar(64)  not null,City_And_State varchar(100) not null);")
     messagebox.showinfo("Successful","Created table.Don't repeat this command again.")
-
 
 #Frontend
 
@@ -537,31 +818,18 @@ def wfilename():
 
 def table2():
     Tlabel = Label(text="Main Menu : ",bg="#bca0dc",font=("Arial Rounded MT Bold",56,"bold")).pack()
-    button1 = Button(text="Show Database Records.",command=lcensus,activebackground="#800080",bg = "#7c5295",bd=2,width=40,height=2,font=(32)).pack()
-    button2 = Button(text="Add A New Record in Database.",command=icensus,activebackground="#800080",bg = "#7c5295",bd=2,width=40,height=2,font=(32)).pack()
-    button3 = Button(text="Update A Record in Database.",command=ucensus,activebackground="#800080",bg = "#7c5295",bd=2,width=40,height=2,font=(32)).pack()
-    button4 = Button(text="Delete A Record from Database.",command=dcensus,activebackground="#800080",bg = "#7c5295",bd=2,width=40,height=2,font=(32)).pack()
-    button5 = Button(text="Search for A Record in Database.",command=scensus,activebackground="#800080",bg = "#7c5295",bd=2,width=40,height=2,font=(32)).pack()
-    button6 = Button(text="Import Data from CSV.",command=rfilename,activebackground="#800080",bg = "#7c5295",bd=2,width=40,height=2,font=(32)).pack()
-    button7 = Button(text="Export Records from Database to CSV.",command=wfilename,activebackground="#800080",bg = "#7c5295",bd=2,width=40,height=2,font=(32)).pack()
-    button8 = Button(text="Setup Table(from premade database only.).",command=setupcensus,activebackground="#800080",bg = "#7c5295",bd=2,width=40,height=2,font=(32)).pack()
-    button9 = Button(text="Quit Program.",command=quit,activebackground="#800080",bg = "#7c5295",bd=2,width=40,height=2,font=(32)).pack()
-
-
-
-
-
-
-
-
-
-
+    button1 = Button(text="Show Database Records.",command=lcensus,activebackground="#800080",bg = "#7c5295",bd=2,width=40,height=2,font=(32)).pack(padx=10,pady=10)
+    button2 = Button(text="Add A New Record in Database.",command=icensus,activebackground="#800080",bg = "#7c5295",bd=2,width=40,height=2,font=(32)).pack(padx=10,pady=10)
+    button3 = Button(text="Update A Record in Database.",command=ucensus,activebackground="#800080",bg = "#7c5295",bd=2,width=40,height=2,font=(32)).pack(padx=10,pady=10)
+    button4 = Button(text="Delete A Record from Database.",command=dcensus,activebackground="#800080",bg = "#7c5295",bd=2,width=40,height=2,font=(32)).pack(padx=10,pady=10)
+    button5 = Button(text="Search for A Record in Database.",command=scensus,activebackground="#800080",bg = "#7c5295",bd=2,width=40,height=2,font=(32)).pack(padx=10,pady=10)
+    button6 = Button(text="Import Data from CSV.",command=rfilename,activebackground="#800080",bg = "#7c5295",bd=2,width=40,height=2,font=(32)).pack(padx=10,pady=10)
+    button7 = Button(text="Export Records from Database to CSV.",command=wfilename,activebackground="#800080",bg = "#7c5295",bd=2,width=40,height=2,font=(32)).pack(padx=10,pady=10)
+    button8 = Button(text="Setup Table(from premade database only.).",command=setupcensus,activebackground="#800080",bg = "#7c5295",bd=2,width=40,height=2,font=(32)).pack(padx=10,pady=10)
+    button9 = Button(text="Quit Program.",command=quit,activebackground="#800080",bg = "#7c5295",bd=2,width=40,height=2,font=(32)).pack(padx=10,pady=10)
 
 root.resizable(False,False)
 
 root.mainloop()
-
-
-
 
 #made by Aman
