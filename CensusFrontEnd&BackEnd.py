@@ -256,7 +256,7 @@ def icensus(): #ADD A RECORD TO THE DATABASE #COMPLETE
 
             def addi():
                 global FNameEnt,LNameEnt,DOBEnt,EIDEnt,ANumberEnt,FatherNameEnt,MNameEnt,CASEnt
-                root=customtkinter.CTk()
+                root=Tk()
                 root.title("Records in Database.")
                 root.geometry("400x1000")
                 root.config(bg="#D586FF")
