@@ -832,5 +832,3 @@ def table2():
 root.resizable(False,False)
 
 root.mainloop()
-
-#made by Aman
